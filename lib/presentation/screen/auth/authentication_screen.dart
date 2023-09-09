@@ -40,57 +40,87 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 2,
           itemBuilder: (context, pageIndex) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  customText(
-                    customTextValue: 'TigaSendok',
-                    customTextStyle: heading1.copyWith(color: primaryColor100),
-                    customTextAlign: TextAlign.center,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      customButtonWithIcon(
-                        context,
-                        customButtonTap: () {},
-                        customButtonValue: 'Masuk dengan Google',
-                        customButtonIcon: FontAwesomeIcons.google,
+            return Center(
+              child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                      child: customText(
+                        customTextValue: 'TigaSendok',
+                        customTextStyle:
+                            heading1.copyWith(color: primaryColor100),
+                        customTextAlign: TextAlign.center,
                       ),
-                      customVerticalDivider(
-                        context,
-                        customHeight: 16,
-                        customValue: 'Atau',
+                    ),
+                    customSpaceVertical(52),
+                    customButtonWithIcon(
+                      context,
+                      customButtonTap: () {},
+                      customButtonValue: 'Masuk dengan Google',
+                      customButtonIcon: FontAwesomeIcons.google,
+                    ),
+                    customVerticalDivider(
+                      context,
+                      customHeight: 16,
+                      customValue: 'Atau',
+                    ),
+                    Visibility(
+                      visible: pageIndex == 1,
+                      child: customTextField(
+                        customTextFieldController: nameController,
+                        customTextFieldErrorText: nameErrorText,
+                        customTextFieldHintText: 'Nama Lengkap',
+                        customTextFieldKeyboardType: TextInputType.text,
                       ),
-                      Visibility(
-                        visible: pageIndex == 1,
-                        child: customTextField(
-                          customTextFieldController: nameController,
-                          customTextFieldErrorText: nameErrorText,
-                          customTextFieldHintText: 'Nama Lengkap',
-                          customTextFieldKeyboardType: TextInputType.text,
+                    ),
+                    Visibility(
+                      visible: pageIndex == 1,
+                      child: customSpaceVertical(16),
+                    ),
+                    customTextField(
+                      customTextFieldController: emailController,
+                      customTextFieldErrorText: emailErrorText,
+                      customTextFieldHintText: 'Alamat Email',
+                      customTextFieldKeyboardType: TextInputType.emailAddress,
+                    ),
+                    customSpaceVertical(16),
+                    customTextField(
+                      customTextFieldController: passwordController,
+                      customTextFieldErrorText: passwordErrorText,
+                      customTextFieldHintText: 'Kata Sandi',
+                      customTextFieldKeyboardType:
+                          TextInputType.visiblePassword,
+                      customTextFieldObscureText: isPasswordVisible,
+                      customTextFieldSuffix: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible!;
+                          });
+                        },
+                        child: Icon(
+                          isPasswordVisible!
+                              ? FontAwesomeIcons.eyeSlash
+                              : FontAwesomeIcons.eye,
+                          color: primaryColor60,
+                          size: 16,
                         ),
                       ),
-                      Visibility(
-                        visible: pageIndex == 1,
-                        child: customSpaceVertical(16),
-                      ),
-                      customTextField(
-                        customTextFieldController: emailController,
-                        customTextFieldErrorText: emailErrorText,
-                        customTextFieldHintText: 'Alamat Email',
-                        customTextFieldKeyboardType: TextInputType.emailAddress,
-                      ),
-                      customSpaceVertical(16),
-                      customTextField(
-                        customTextFieldController: passwordController,
-                        customTextFieldErrorText: passwordErrorText,
-                        customTextFieldHintText: 'Kata Sandi',
+                    ),
+                    Visibility(
+                      visible: pageIndex == 1,
+                      child: customSpaceVertical(16),
+                    ),
+                    Visibility(
+                      visible: pageIndex == 1,
+                      child: customTextField(
+                        customTextFieldController: confirmPasswordController,
+                        customTextFieldErrorText: confirmPasswordErrorText,
+                        customTextFieldHintText: 'Ulangi Kata Sandi',
                         customTextFieldKeyboardType:
                             TextInputType.visiblePassword,
                         customTextFieldObscureText: isPasswordVisible,
@@ -109,109 +139,83 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           ),
                         ),
                       ),
-                      Visibility(
-                        visible: pageIndex == 1,
-                        child: customSpaceVertical(16),
-                      ),
-                      Visibility(
-                        visible: pageIndex == 1,
-                        child: customTextField(
-                          customTextFieldController: confirmPasswordController,
-                          customTextFieldErrorText: confirmPasswordErrorText,
-                          customTextFieldHintText: 'Ulangi Kata Sandi',
-                          customTextFieldKeyboardType:
-                              TextInputType.visiblePassword,
-                          customTextFieldObscureText: isPasswordVisible,
-                          customTextFieldSuffix: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible!;
-                              });
-                            },
-                            child: Icon(
-                              isPasswordVisible!
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye,
-                              color: primaryColor60,
-                              size: 16,
+                    ),
+                    Visibility(
+                      visible: pageIndex == 0,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: customText(
+                            customTextValue: 'Lupa Kata Sandi?',
+                            customTextStyle: subHeading3.copyWith(
+                              color: primaryColor100,
                             ),
                           ),
                         ),
                       ),
-                      Visibility(
-                        visible: pageIndex == 0,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: customText(
-                              customTextValue: 'Lupa Kata Sandi?',
-                              customTextStyle: subHeading3.copyWith(
-                                color: primaryColor100,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      customSpaceVertical(16),
-                      customButton(
-                        context,
-                        customButtonTap: () {
-                          if (pageIndex == 1 && nameController.text.isEmpty)
-                            return setState(() => nameErrorText =
-                                'Nama lengkap tidak boleh kosong');
+                    ),
+                    customSpaceVertical(16),
+                    customButton(
+                      context,
+                      customButtonTap: () {
+                        if (pageIndex == 1 && nameController.text.isEmpty)
+                          return setState(() => nameErrorText =
+                              'Nama lengkap tidak boleh kosong');
 
-                          if (emailController.text.isEmpty)
-                            return setState(() => emailErrorText =
-                                'Alamat email tidak boleh kosong');
+                        if (emailController.text.isEmpty)
+                          return setState(() => emailErrorText =
+                              'Alamat email tidak boleh kosong');
 
-                          if (passwordController.text.isEmpty)
-                            return setState(() => passwordErrorText =
-                                'Kata sandi tidak boleh kosong');
+                        if (passwordController.text.isEmpty)
+                          return setState(() => passwordErrorText =
+                              'Kata sandi tidak boleh kosong');
 
-                          if (passwordController.text.length < 8)
-                            return setState(() => passwordErrorText =
-                                'Kata sandi minimal 8 karakter');
+                        if (passwordController.text.length < 8)
+                          return setState(() => passwordErrorText =
+                              'Kata sandi minimal 8 karakter');
 
-                          if (pageIndex == 1 &&
-                              confirmPasswordController.text.isEmpty)
-                            return setState(() => confirmPasswordErrorText =
-                                'Kata sandi tidak boleh kosong');
+                        if (pageIndex == 1 &&
+                            confirmPasswordController.text.isEmpty)
+                          return setState(() => confirmPasswordErrorText =
+                              'Kata sandi tidak boleh kosong');
 
-                          if (pageIndex == 1 &&
-                              passwordController.text !=
-                                  confirmPasswordController.text)
-                            return setState(() => confirmPasswordErrorText =
-                                'Kata sandi tidak sama');
+                        if (pageIndex == 1 &&
+                            passwordController.text !=
+                                confirmPasswordController.text)
+                          return setState(() => confirmPasswordErrorText =
+                              'Kata sandi tidak sama');
 
-                          setState(() {
-                            emailErrorText = null;
-                            passwordErrorText = null;
-                            confirmPasswordErrorText = null;
-                            nameErrorText = null;
-                          });
+                        setState(() {
+                          emailErrorText = null;
+                          passwordErrorText = null;
+                          confirmPasswordErrorText = null;
+                          nameErrorText = null;
+                        });
 
-                          switch (pageIndex) {
-                            case 0:
-                              loginFunction(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
-                              break;
-                            case 1:
-                              registerFunction(
-                                name: nameController.text,
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
-                              break;
-                            default:
-                          }
-                        },
-                        customButtonValue: pageIndex == 0 ? 'Masuk' : 'Daftar',
-                      ),
-                      customSpaceVertical(16),
-                      Row(
+                        switch (pageIndex) {
+                          case 0:
+                            loginFunction(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                            break;
+                          case 1:
+                            registerFunction(
+                              name: nameController.text,
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                            break;
+                          default:
+                        }
+                      },
+                      customButtonValue: pageIndex == 0 ? 'Masuk' : 'Daftar',
+                    ),
+                    customSpaceVertical(16),
+                    Visibility(
+                      visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -246,9 +250,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             );
           },
