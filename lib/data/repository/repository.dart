@@ -41,4 +41,16 @@ class Repository {
     final UserResponse user = UserResponse.fromJson(data);
     return user;
   }
+
+  Future<UserResponse> userLogOut({required accessToken}) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+    final response = await post(Uri.parse('$baseUrl/logout'), headers: header);
+
+    final data = jsonDecode(response.body);
+    final UserResponse user = UserResponse.fromJson(data);
+    return user;
+  }
 }

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tiga Sendok',
-      initialRoute: AuthenticationScreen.routeName,
+      initialRoute: SplashScreen.routeName,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case SplashScreen.routeName:

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
+import 'package:tigasendok/data/storage/secure_storage.dart';
 import 'package:tigasendok/presentation/screen/home/home_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
 import 'package:tigasendok/presentation/widget/dialog.dart';
@@ -30,6 +31,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   String? passwordErrorText;
   String? confirmPasswordErrorText;
   bool? isPasswordVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +76,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     customSpaceVertical(52),
                     customButtonWithIcon(
                       context,
-                      customButtonTap: () {},
+                      customButtonTap: () {
+                        Future.delayed(const Duration(seconds: 3),
+                            () => Navigator.pop(context));
+                        customBasicDialog(
+                          context,
+                          customDialogIcon:
+                              'lib/asset/lottie/lottieNotReady.json',
+                          customDialogText: 'Layanan belum tersedia',
+                        );
+                      },
                       customButtonValue: 'Masuk dengan Google',
                       customButtonIcon: FontAwesomeIcons.google,
                     ),
@@ -282,6 +307,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             );
             break;
           case false:
+            await SecureStorage().writeSecureData(
+                'access_token', response.accessToken.toString());
+            await SecureStorage()
+                .writeSecureData('name', response.user.name.toString());
             Future.delayed(
                 const Duration(seconds: 2), () => Navigator.pop(context));
             customBasicDialog(

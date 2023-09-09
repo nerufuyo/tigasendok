@@ -10,6 +10,7 @@ Future<dynamic> customBasicDialog(
 }) {
   return showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (context) => Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),

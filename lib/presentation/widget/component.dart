@@ -80,12 +80,14 @@ InkWell customButton(
   required customButtonValue,
   customButtonColor,
   customButtonWidth,
+  customButtonHeight,
   customButtonValueColor,
 }) {
   return InkWell(
     onTap: customButtonTap,
     child: Container(
       width: customButtonWidth ?? MediaQuery.of(context).size.width,
+      height: customButtonHeight ?? 52,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: customButtonColor ?? primaryColor100,
