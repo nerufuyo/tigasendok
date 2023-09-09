@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tigasendok/presentation/screen/authentication_screen.dart';
+import 'package:tigasendok/presentation/screen/auth/authentication_screen.dart';
+import 'package:tigasendok/presentation/screen/home/home_screen.dart';
 import 'package:tigasendok/presentation/screen/initial/boarding_screen.dart';
 import 'package:tigasendok/presentation/screen/initial/splash_screen.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tiga Sendok',
-      initialRoute: SplashScreen.routeName,
+      initialRoute: AuthenticationScreen.routeName,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case SplashScreen.routeName:
@@ -29,6 +30,10 @@ class MyApp extends StatelessWidget {
           case AuthenticationScreen.routeName:
             return MaterialPageRoute(
               builder: (context) => const AuthenticationScreen(),
+            );
+          case HomeScreen.routeName:
+            return MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
             );
 
           default:
