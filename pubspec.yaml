@@ -12,6 +12,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^5.1.0
   flutter_svg: ^2.0.7
+  font_awesome_flutter: ^10.5.0
+  flutter_dotenv: ^5.1.0
+  http: ^1.1.0
+  lottie: ^2.6.0
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +25,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - .env
     - lib/asset/image/cms.svg
     - lib/asset/image/management.svg
     - lib/asset/image/order.svg
+    - lib/asset/lottie/lottieLoading.json
+    - lib/asset/lottie/lottieSuccess.json
+    - lib/asset/lottie/lottieFailed.json
+    - lib/asset/lottie/lottieAnalys.json
+    - lib/asset/lottie/lottiePhone.json
+    - lib/asset/lottie/lottieStatistic.json
+    - lib/asset/lottie/lottieWelcome.json
