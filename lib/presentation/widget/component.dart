@@ -181,3 +181,32 @@ Padding customVerticalDivider(
     ),
   );
 }
+
+AppBar customBasicAppBar(
+  BuildContext context, {
+  required customTitle,
+  customAddAction,
+  isAction = true,
+}) {
+  return AppBar(
+    backgroundColor: primaryColor100,
+    elevation: 0,
+    centerTitle: true,
+    title: customText(
+      customTextValue: customTitle,
+      customTextStyle: heading4.copyWith(color: Colors.white),
+    ),
+    leading: IconButton(
+      onPressed: () => Navigator.pop(context),
+      icon: const Icon(Icons.arrow_back_rounded),
+    ),
+    actions: isAction
+        ? [
+            IconButton(
+              onPressed: customAddAction,
+              icon: const Icon(Icons.add_rounded),
+            ),
+          ]
+        : [],
+  );
+}

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tigasendok/presentation/screen/manage/edit/manage_edit_customer_screen.dart';
 
 final List boardingLists = [
   {
@@ -25,15 +26,46 @@ final List boardingLists = [
 
 final List homeMenuLists = [
   {
+    'category': 'customer',
     'title': 'Kelola Pelanggan',
     'description': 'Kelola data pelanggan anda',
-    'icon': FontAwesomeIcons.users,
-    'route': '/customer-screen'
+    'icon': FontAwesomeIcons.solidUser,
   },
   {
+    'category': 'order',
     'title': 'Kelola Pesanan',
     'description': 'Kelola data pesanan anda',
     'icon': FontAwesomeIcons.shoppingBag,
-    'route': '/customer-screen'
+  },
+];
+
+final List popupMenuLists = [
+  {
+    'value': 'edit',
+    'title': 'Edit',
+    'icon': FontAwesomeIcons.edit,
+    'route': ManageEditCustomerScreen.routeName,
+  },
+  {
+    'value': 'delete',
+    'title': 'Hapus',
+    'icon': FontAwesomeIcons.x,
+    'route': ManageEditCustomerScreen.routeName,
+  },
+];
+
+final List editCustomerLists = ['Nama', 'Jenis Kelamin', 'Telepon'];
+final List genderLists = [
+  {
+    'value': 'pria',
+    'title': 'Pria',
+  },
+  {
+    'value': 'wanita',
+    'title': 'Wanita',
+  },
+  {
+    'value': 'lainnya',
+    'title': 'Lainnya',
   },
 ];

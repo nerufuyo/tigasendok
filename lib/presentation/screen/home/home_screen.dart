@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
 import 'package:tigasendok/data/storage/secure_storage.dart';
 import 'package:tigasendok/presentation/screen/auth/authentication_screen.dart';
+import 'package:tigasendok/presentation/screen/manage/manage_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await SecureStorage()
         .readSecureData('name')
         .then((value) => setState(() => name = value));
+    print(accessToken);
   }
 
   @override
@@ -43,18 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 customText(
                   customTextValue: '${getGreeting()}!',
-                  customTextStyle: heading4,
+                  customTextStyle: heading5,
                 ),
                 customText(
                   customTextValue: name != null ? name! : 'User',
                   customTextStyle: heading3,
                 ),
                 customSpaceVertical(20),
+                // Lottie.asset(
+                //   'lib/asset/lottie/lottieLogo.json',
+                //   width: MediaQuery.of(context).size.width * .5,
+                //   fit: BoxFit.cover,
+                // ),
+                // customSpaceVertical(20),
                 ListView.separated(
                   separatorBuilder: (context, index) => customSpaceVertical(8),
                   shrinkWrap: true,
@@ -63,19 +72,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, contentIndex) {
                     return InkWell(
                       onTap: () => Navigator.pushNamed(
-                          context, homeMenuLists[contentIndex]['route']),
+                        context,
+                        ManageScreen.routeName,
+                        arguments: {
+                          'category': homeMenuLists[contentIndex]['category'],
+                          'accessToken': accessToken,
+                        },
+                      ),
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
+                          border: Border.all(
+                            color: secondaryColor100,
+                            width: 2,
+                          ),
                           borderRadius: BorderRadius.circular(8),
-                          color: secondaryColor100,
+                          color: secondaryColor70,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(homeMenuLists[contentIndex]['icon'], size: 80),
-                            customSpaceHorizontal(32),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: primaryColor100,
+                              ),
+                              padding: const EdgeInsets.all(24),
+                              child: Center(
+                                child: Icon(
+                                  homeMenuLists[contentIndex]['icon'],
+                                  size: 40,
+                                  color: secondaryColor100,
+                                ),
+                              ),
+                            ),
+                            customSpaceHorizontal(24),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -85,11 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ['title'],
                                   customTextStyle: heading3,
                                 ),
-                                customSpaceVertical(8),
                                 customText(
                                   customTextValue: homeMenuLists[contentIndex]
                                       ['description'],
-                                  customTextStyle: bodyText2,
+                                  customTextStyle: subHeading3,
                                 ),
                               ],
                             ),

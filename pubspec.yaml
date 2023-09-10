@@ -40,3 +40,5 @@ flutter:
     - lib/asset/lottie/lottieStatistic.json
     - lib/asset/lottie/lottieWelcome.json
     - lib/asset/lottie/lottieNotReady.json
+    - lib/asset/lottie/lottieLogo.json
+    - lib/asset/lottie/lottieAsk.json
