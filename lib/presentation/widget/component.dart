@@ -19,6 +19,7 @@ SizedBox customSpaceVertical(double height) => SizedBox(height: height);
 SizedBox customSpaceHorizontal(double width) => SizedBox(width: width);
 
 TextField customTextField({
+  customTextFieldEnabled = true,
   required customTextFieldController,
   customTextFieldMaxLines,
   customTextFieldObscureText,
@@ -29,6 +30,7 @@ TextField customTextField({
   customTextFieldSuffix,
 }) {
   return TextField(
+    enabled: customTextFieldEnabled,
     controller: customTextFieldController,
     maxLines: customTextFieldMaxLines ?? 1,
     obscureText: customTextFieldObscureText ?? false,
@@ -80,12 +82,14 @@ InkWell customButton(
   required customButtonValue,
   customButtonColor,
   customButtonWidth,
+  customButtonHeight,
   customButtonValueColor,
 }) {
   return InkWell(
     onTap: customButtonTap,
     child: Container(
       width: customButtonWidth ?? MediaQuery.of(context).size.width,
+      height: customButtonHeight ?? 52,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: customButtonColor ?? primaryColor100,
@@ -177,5 +181,35 @@ Padding customVerticalDivider(
         ),
       ],
     ),
+  );
+}
+
+AppBar customBasicAppBar(
+  BuildContext context, {
+  required customTitle,
+  customAddAction,
+  customLeading,
+  isAction = true,
+}) {
+  return AppBar(
+    backgroundColor: primaryColor100,
+    elevation: 0,
+    centerTitle: true,
+    title: customText(
+      customTextValue: customTitle,
+      customTextStyle: heading4.copyWith(color: Colors.white),
+    ),
+    leading: IconButton(
+      onPressed: customLeading ?? () => Navigator.pop(context),
+      icon: const Icon(Icons.arrow_back_rounded),
+    ),
+    actions: isAction
+        ? [
+            IconButton(
+              onPressed: customAddAction,
+              icon: const Icon(Icons.add_rounded),
+            ),
+          ]
+        : [],
   );
 }

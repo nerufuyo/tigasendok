@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
+import 'package:tigasendok/data/storage/secure_storage.dart';
+import 'package:tigasendok/presentation/screen/home/home_screen.dart';
 import 'package:tigasendok/presentation/screen/initial/boarding_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
 
@@ -13,12 +15,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  void checkLogin() {
+    SecureStorage().readSecureData('access_token').then((value) {
+      if (value != null) {
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      } else {
+        Navigator.pushReplacementNamed(context, BoardingScreen.routeName);
+      }
+    });
+  }
+
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, BoardingScreen.routeName);
-    });
     super.initState();
+    Future.delayed(const Duration(seconds: 3), () => checkLogin());
   }
 
   @override
@@ -42,10 +52,13 @@ class _SplashScreenState extends State<SplashScreen> {
               customTextAlign: TextAlign.center,
             ),
             customSpaceVertical(8),
-            customText(
-              customTextValue: 'Makan enak, sehat, dan murah tanpa ribet.',
-              customTextStyle: subHeading2.copyWith(color: secondaryColor100),
-              customTextAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: customText(
+                customTextValue: 'Makan enak, sehat, dan murah tanpa ribet.',
+                customTextStyle: subHeading2.copyWith(color: secondaryColor100),
+                customTextAlign: TextAlign.center,
+              ),
             )
           ],
         ),
