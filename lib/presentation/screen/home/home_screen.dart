@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
 import 'package:tigasendok/data/storage/secure_storage.dart';
 import 'package:tigasendok/presentation/screen/auth/authentication_screen.dart';
-import 'package:tigasendok/presentation/screen/manage/manage_screen.dart';
+import 'package:tigasendok/presentation/screen/manage/manage_customer_screen.dart';
+import 'package:tigasendok/presentation/screen/manage/manage_order_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await SecureStorage()
         .readSecureData('name')
         .then((value) => setState(() => name = value));
-    print(accessToken);
   }
 
   @override
@@ -73,11 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     return InkWell(
                       onTap: () => Navigator.pushNamed(
                         context,
-                        ManageScreen.routeName,
-                        arguments: {
-                          'category': homeMenuLists[contentIndex]['category'],
-                          'accessToken': accessToken,
-                        },
+                        contentIndex == 0
+                            ? ManageCustomerScreen.routeName
+                            : ManageOrderScreen.routeName,
+                        arguments: {'accessToken': accessToken},
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16),

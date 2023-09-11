@@ -19,6 +19,7 @@ SizedBox customSpaceVertical(double height) => SizedBox(height: height);
 SizedBox customSpaceHorizontal(double width) => SizedBox(width: width);
 
 TextField customTextField({
+  customTextFieldEnabled = true,
   required customTextFieldController,
   customTextFieldMaxLines,
   customTextFieldObscureText,
@@ -29,6 +30,7 @@ TextField customTextField({
   customTextFieldSuffix,
 }) {
   return TextField(
+    enabled: customTextFieldEnabled,
     controller: customTextFieldController,
     maxLines: customTextFieldMaxLines ?? 1,
     obscureText: customTextFieldObscureText ?? false,
@@ -186,6 +188,7 @@ AppBar customBasicAppBar(
   BuildContext context, {
   required customTitle,
   customAddAction,
+  customLeading,
   isAction = true,
 }) {
   return AppBar(
@@ -197,7 +200,7 @@ AppBar customBasicAppBar(
       customTextStyle: heading4.copyWith(color: Colors.white),
     ),
     leading: IconButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: customLeading ?? () => Navigator.pop(context),
       icon: const Icon(Icons.arrow_back_rounded),
     ),
     actions: isAction

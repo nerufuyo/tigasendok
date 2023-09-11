@@ -1,13 +1,13 @@
-// ignore_for_file: constant_identifier_names
+import 'package:tigasendok/data/model/customer_model.dart';
+import 'package:tigasendok/data/model/product_model.dart';
 
-class CustomerResponse {
+class OrderResponse {
   final int currentPage;
-  final List<Customer> customer;
+  final List<Order> order;
   final String firstPageUrl;
   final int from;
   final int lastPage;
   final String lastPageUrl;
-  // final List<Link> links;
   final String nextPageUrl;
   final String path;
   final int perPage;
@@ -15,14 +15,13 @@ class CustomerResponse {
   final int to;
   final int total;
 
-  CustomerResponse({
+  OrderResponse({
     required this.currentPage,
-    required this.customer,
+    required this.order,
     required this.firstPageUrl,
     required this.from,
     required this.lastPage,
     required this.lastPageUrl,
-    // required this.links,
     required this.nextPageUrl,
     required this.path,
     required this.perPage,
@@ -31,16 +30,13 @@ class CustomerResponse {
     required this.total,
   });
 
-  factory CustomerResponse.fromJson(Map<String, dynamic> json) =>
-      CustomerResponse(
+  factory OrderResponse.fromJson(Map<String, dynamic> json) => OrderResponse(
         currentPage: json["current_page"],
-        customer:
-            List<Customer>.from(json["data"].map((x) => Customer.fromJson(x))),
+        order: List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
         firstPageUrl: json["first_page_url"],
         from: json["from"],
         lastPage: json["last_page"],
         lastPageUrl: json["last_page_url"],
-        // links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
         nextPageUrl: json["next_page_url"],
         path: json["path"],
         perPage: json["per_page"],
@@ -51,12 +47,11 @@ class CustomerResponse {
 
   Map<String, dynamic> toJson() => {
         "current_page": currentPage,
-        "data": List<dynamic>.from(customer.map((x) => x.toJson())),
+        "data": List<dynamic>.from(order.map((x) => x.toJson())),
         "first_page_url": firstPageUrl,
         "from": from,
         "last_page": lastPage,
         "last_page_url": lastPageUrl,
-        // "links": List<dynamic>.from(links.map((x) => x.toJson())),
         "next_page_url": nextPageUrl,
         "path": path,
         "per_page": perPage,
@@ -66,34 +61,46 @@ class CustomerResponse {
       };
 }
 
-class Customer {
+class Order {
   final int id;
-  final String uuid;
-  final String name;
-  final String gender;
-  final String phone;
+  final int qty;
+  final int price;
+  final int total;
+  final int isPaid;
+  final DateTime createdAt;
+  final Customer customer;
+  final Product product;
 
-  Customer({
+  Order({
     required this.id,
-    required this.uuid,
-    required this.name,
-    required this.gender,
-    required this.phone,
+    required this.qty,
+    required this.price,
+    required this.total,
+    required this.isPaid,
+    required this.createdAt,
+    required this.customer,
+    required this.product,
   });
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
-        uuid: json["uuid"],
-        name: json["name"],
-        gender: json["gender"],
-        phone: json["phone"],
+        qty: json["qty"],
+        price: json["price"],
+        total: json["total"],
+        isPaid: json["is_paid"],
+        createdAt: DateTime.parse(json["created_at"]),
+        customer: Customer.fromJson(json["customer"]),
+        product: Product.fromJson(json["product"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "uuid": uuid,
-        "name": name,
-        "gender": gender,
-        "phone": phone,
+        "qty": qty,
+        "price": price,
+        "total": total,
+        "is_paid": isPaid,
+        "created_at": createdAt.toIso8601String(),
+        "customer": customer.toJson(),
+        "product": product.toJson(),
       };
 }

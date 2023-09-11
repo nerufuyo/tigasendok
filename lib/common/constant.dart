@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tigasendok/presentation/screen/manage/edit/manage_edit_customer_screen.dart';
 
 final List boardingLists = [
   {
@@ -44,28 +43,34 @@ final List popupMenuLists = [
     'value': 'edit',
     'title': 'Edit',
     'icon': FontAwesomeIcons.edit,
-    'route': ManageEditCustomerScreen.routeName,
   },
   {
     'value': 'delete',
     'title': 'Hapus',
     'icon': FontAwesomeIcons.x,
-    'route': ManageEditCustomerScreen.routeName,
   },
 ];
 
 final List editCustomerLists = ['Nama', 'Jenis Kelamin', 'Telepon'];
 final List genderLists = [
   {
-    'value': 'pria',
+    'value': 'male',
     'title': 'Pria',
   },
   {
-    'value': 'wanita',
+    'value': 'female',
     'title': 'Wanita',
   },
   {
-    'value': 'lainnya',
+    'value': 'other',
     'title': 'Lainnya',
   },
+];
+
+final List editOrderLists = [
+  'Customer',
+  'Product',
+  'Price',
+  'Quantity',
+  'Total',
 ];

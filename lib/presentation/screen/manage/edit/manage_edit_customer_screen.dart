@@ -1,11 +1,11 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
+import 'package:tigasendok/presentation/screen/manage/manage_customer_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
 import 'package:tigasendok/presentation/widget/dialog.dart';
 
@@ -27,7 +27,20 @@ class ManageEditCustomerScreen extends StatefulWidget {
 class _ManageEditCustomerScreenState extends State<ManageEditCustomerScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  String selectedGenderValue = 'pria';
+  String? selectedGenderValue;
+
+  @override
+  void initState() {
+    super.initState();
+    fecthData();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,53 +133,39 @@ class _ManageEditCustomerScreenState extends State<ManageEditCustomerScreen> {
                   itemBuilder: (context, buttonIndex) => customButton(
                     context,
                     customButtonTap: () {
-                      if (buttonIndex == 0) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(28),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Lottie.asset(
-                                    'lib/asset/lottie/lottieAsk.json',
-                                    width: 140,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  customSpaceVertical(16),
-                                  customText(
-                                    customTextValue: 'Apakah kamu yakin?',
-                                    customTextStyle: heading4,
-                                  ),
-                                  customSpaceVertical(16),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      2,
-                                      (index) => customButton(
-                                        context,
-                                        customButtonTap: () {},
-                                        customButtonValue:
-                                            index == 0 ? 'Simpan' : 'Hapus',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                      if (buttonIndex == 0)
+                        return customDialogWithButton(
+                          context,
+                          customDialogIcon: 'lib/asset/lottie/lottieAsk.json',
+                          customDialogText: 'Apakah kamu yakin ingin mengubah?',
+                          customDialogLeftButtonTap: () => updateCustomer(
+                            id: widget.id,
+                            accessToken: widget.accessToken,
+                            name: nameController.text.isEmpty
+                                ? data!.name
+                                : nameController.text,
+                            gender: selectedGenderValue,
+                            phone: phoneController.text.isEmpty
+                                ? data!.phone
+                                : phoneController.text,
                           ),
+                          customDialogRightButtonTap: () =>
+                              Navigator.pop(context),
                         );
-                      }
+
+                      if (buttonIndex == 1)
+                        return customDialogWithButton(
+                          context,
+                          customDialogIcon: 'lib/asset/lottie/lottieAsk.json',
+                          customDialogText:
+                              'Apakah kamu yakin ingin menghapus?',
+                          customDialogLeftButtonTap: () => deleteCustomer(
+                            id: widget.id,
+                            accessToken: widget.accessToken,
+                          ),
+                          customDialogRightButtonTap: () =>
+                              Navigator.pop(context),
+                        );
                     },
                     customButtonValue: buttonIndex == 0 ? 'Simpan' : 'Hapus',
                     customButtonColor:
@@ -181,21 +180,30 @@ class _ManageEditCustomerScreenState extends State<ManageEditCustomerScreen> {
     );
   }
 
+  fecthData() async {
+    final response = await Repository().getCustomerById(
+      id: widget.id,
+      accessToken: widget.accessToken,
+    );
+    selectedGenderValue = response.gender;
+  }
+
   updateCustomer({
     required id,
+    required accessToken,
     required name,
     required gender,
     required phone,
   }) async {
     final response = await Repository().updateCustomerById(
-      id: widget.id,
-      accessToken: widget.accessToken,
+      id: id,
+      accessToken: accessToken,
       name: name,
       gender: gender,
       phone: phone,
     );
 
-    switch (response.uuid.isEmpty) {
+    switch (response.name.isEmpty) {
       case true:
         Future.delayed(
             const Duration(seconds: 3), () => Navigator.pop(context));
@@ -209,11 +217,8 @@ class _ManageEditCustomerScreenState extends State<ManageEditCustomerScreen> {
         Future.delayed(
           const Duration(seconds: 3),
           () => Navigator.pushReplacementNamed(
-              context, ManageEditCustomerScreen.routeName,
-              arguments: {
-                'accessToken': widget.accessToken,
-                'id': widget.id,
-              }),
+              context, ManageCustomerScreen.routeName,
+              arguments: {'accessToken': widget.accessToken}),
         );
         customBasicDialog(
           context,
@@ -222,5 +227,22 @@ class _ManageEditCustomerScreenState extends State<ManageEditCustomerScreen> {
         );
         break;
     }
+  }
+
+  deleteCustomer({required id, required accessToken}) async {
+    await Repository().deleteCustomerByID(id: id, accessToken: accessToken);
+
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacementNamed(
+          context, ManageCustomerScreen.routeName,
+          arguments: {'accessToken': widget.accessToken}),
+    );
+
+    customBasicDialog(
+      context,
+      customDialogIcon: 'lib/asset/lottie/lottieSuccess.json',
+      customDialogText: 'Data berhasil dihapus',
+    );
   }
 }

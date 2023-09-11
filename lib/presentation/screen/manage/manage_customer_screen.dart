@@ -1,41 +1,52 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
+import 'package:tigasendok/presentation/screen/home/home_screen.dart';
+import 'package:tigasendok/presentation/screen/manage/add/manage_add_customer.dart';
+import 'package:tigasendok/presentation/screen/manage/edit/manage_edit_customer_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
+import 'package:tigasendok/presentation/widget/dialog.dart';
 
-class ManageScreen extends StatefulWidget {
-  const ManageScreen({
+class ManageCustomerScreen extends StatefulWidget {
+  const ManageCustomerScreen({
     super.key,
-    required this.category,
     required this.accessToken,
   });
-  static const routeName = '/manage-screen';
-  final String category;
+  static const routeName = '/manage-customer-screen';
   final String accessToken;
 
   @override
-  State<ManageScreen> createState() => _ManageScreenState();
+  State<ManageCustomerScreen> createState() => _ManageCustomerScreenState();
 }
 
-class _ManageScreenState extends State<ManageScreen> {
+class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customBasicAppBar(
         context,
-        customTitle: widget.category == 'customer'
-            ? 'Kelola Pelanggan'
-            : 'Kelola Pesanan',
-        customAddAction: () {},
+        customTitle: 'Kelola Pelanggan',
+        customLeading: () => Navigator.pushReplacementNamed(
+          context,
+          HomeScreen.routeName,
+          arguments: {
+            'accessToken': widget.accessToken,
+          },
+        ),
+        customAddAction: () => Navigator.pushNamed(
+          context,
+          ManageAddCustomer.routeName,
+          arguments: {
+            'accessToken': widget.accessToken,
+          },
+        ),
       ),
       body: FutureBuilder(
-        future: widget.category == 'customer'
-            ? Repository().getCustomers(accessToken: widget.accessToken)
-            : Repository().getCustomers(accessToken: widget.accessToken),
+        future: Repository().getCustomers(accessToken: widget.accessToken),
         builder: (context, snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState)
             return const Center(child: CircularProgressIndicator());
@@ -75,14 +86,31 @@ class _ManageScreenState extends State<ManageScreen> {
                   itemBuilder: (context) => List.generate(
                     popupMenuLists.length,
                     (index) => PopupMenuItem(
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        popupMenuLists[index]['route'],
-                        arguments: {
-                          'accessToken': widget.accessToken,
-                          'id': item.id
-                        },
-                      ),
+                      onTap: () {
+                        if (popupMenuLists[index]['title'] == 'Edit') {
+                          Navigator.pushNamed(
+                            context,
+                            ManageEditCustomerScreen.routeName,
+                            arguments: {
+                              'accessToken': widget.accessToken,
+                              'id': item.id,
+                            },
+                          );
+                        } else {
+                          customDialogWithButton(
+                            context,
+                            customDialogIcon: 'lib/asset/lottie/lottieAsk.json',
+                            customDialogText:
+                                'Apakah kamu yakin ingin menghapus?',
+                            customDialogLeftButtonTap: () => deleteCustomer(
+                              id: item.id,
+                              accessToken: widget.accessToken,
+                            ),
+                            customDialogRightButtonTap: () =>
+                                Navigator.pop(context),
+                          );
+                        }
+                      },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -108,6 +136,25 @@ class _ManageScreenState extends State<ManageScreen> {
           );
         },
       ),
+    );
+  }
+
+  deleteCustomer({required id, required accessToken}) async {
+    await Repository().deleteCustomerByID(id: id, accessToken: accessToken);
+
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacementNamed(
+          context, ManageCustomerScreen.routeName,
+          arguments: {
+            'accessToken': widget.accessToken,
+          }),
+    );
+
+    customBasicDialog(
+      context,
+      customDialogIcon: 'lib/asset/lottie/lottieSuccess.json',
+      customDialogText: 'Data berhasil dihapus',
     );
   }
 }
