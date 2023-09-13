@@ -184,6 +184,24 @@ class Repository {
     return order;
   }
 
+  Future<OrderResponse> getOrdersByStatus(
+      {required accessToken, required status}) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+    final params = {'status': status};
+
+    final response = await get(
+      Uri.parse('$baseUrl/orders').replace(queryParameters: params),
+      headers: header,
+    );
+
+    final data = jsonDecode(response.body);
+    final OrderResponse order = OrderResponse.fromJson(data);
+    return order;
+  }
+
   Future<Order> getOrderById({required accessToken, required id}) async {
     final header = {
       'Authorization': 'Bearer $accessToken',
