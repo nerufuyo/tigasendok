@@ -122,10 +122,8 @@ class _ManageOrderScreenState extends State<ManageOrderScreen> {
                             customDialogIcon: 'lib/asset/lottie/lottieAsk.json',
                             customDialogText:
                                 'Apakah kamu yakin ingin menghapus?',
-                            customDialogLeftButtonTap: () => deleteOrder(
-                              id: item.id,
-                              accessToken: widget.accessToken,
-                            ),
+                            customDialogLeftButtonTap: () =>
+                                deleteOrder(id: item.id),
                             customDialogRightButtonTap: () =>
                                 Navigator.pop(context),
                           );
@@ -159,17 +157,14 @@ class _ManageOrderScreenState extends State<ManageOrderScreen> {
     );
   }
 
-  deleteOrder({required id, required accessToken}) async {
-    await Repository().deleteCustomerByID(id: id, accessToken: accessToken);
+  deleteOrder({required id}) async {
+    await Repository().deleteOrder(accessToken: widget.accessToken, id: id);
 
     Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 0),
       () => Navigator.pushReplacementNamed(context, ManageOrderScreen.routeName,
-          arguments: {
-            'accessToken': widget.accessToken,
-          }),
+          arguments: {'accessToken': widget.accessToken}),
     );
-
     customBasicDialog(
       context,
       customDialogIcon: 'lib/asset/lottie/lottieSuccess.json',

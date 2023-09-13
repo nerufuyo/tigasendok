@@ -199,6 +199,96 @@ class Repository {
     return order;
   }
 
+  Future<CreateOrder> createOrder({
+    required accessToken,
+    required customerId,
+    required productId,
+    required quantity,
+    required price,
+  }) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+    final body = {
+      'customer_id': customerId,
+      'product_id': productId,
+      'qty': quantity,
+      'price': price,
+    };
+
+    final response = await post(
+      Uri.parse('$baseUrl/orders'),
+      headers: header,
+      body: jsonEncode(body),
+    );
+
+    final data = jsonDecode(response.body);
+    final CreateOrder order = CreateOrder.fromJson(data);
+    return order;
+  }
+
+  Future<UpdateOrder> updateOrderById({
+    required accessToken,
+    required id,
+    required customerId,
+    required productId,
+    required quantity,
+    required price,
+  }) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+
+    final body = {
+      'customer_id': customerId,
+      'product_id': productId,
+      'qty': quantity,
+      'price': price,
+    };
+
+    final response = await put(
+      Uri.parse('$baseUrl/orders/$id'),
+      headers: header,
+      body: jsonEncode(body),
+    );
+
+    final data = jsonDecode(response.body);
+    final UpdateOrder order = UpdateOrder.fromJson(data);
+    return order;
+  }
+
+  Future<Order> deleteOrder({required accessToken, required id}) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+
+    final response = await delete(
+      Uri.parse('$baseUrl/orders/$id'),
+      headers: header,
+    );
+
+    return Order.fromJson(jsonDecode(response.body));
+  }
+
+  Future<PayOrder> payOrderById({required accessToken, required id}) async {
+    final header = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+
+    final response = await put(
+      Uri.parse('$baseUrl/orders/$id/pay'),
+      headers: header,
+    );
+
+    final data = jsonDecode(response.body);
+    final PayOrder order = PayOrder.fromJson(data);
+    return order;
+  }
+
   Future<ProductResponse> getProducts({required accessToken}) async {
     final header = {
       'Authorization': 'Bearer $accessToken',

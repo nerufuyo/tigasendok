@@ -226,11 +226,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             );
                             break;
                           case 1:
-                            registerFunction(
-                              name: nameController.text,
-                              email: emailController.text,
-                              password: passwordController.text,
+                            customDialogWithButton(
+                              context,
+                              customDialogIcon:
+                                  'lib/asset/lottie/lottieAsk.json',
+                              customDialogText: 'Apakah data kamu sudah benar?',
+                              customDialogLeftButtonTap: () => registerFunction(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ),
+                              customDialogRightButtonTap: () =>
+                                  Navigator.pop(context),
                             );
+
                             break;
                           default:
                         }

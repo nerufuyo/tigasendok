@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
@@ -49,20 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 customText(
-                  customTextValue: '${getGreeting()}!',
-                  customTextStyle: heading5,
+                  customTextValue: '${getGreeting()},',
+                  customTextStyle: subHeading3,
                 ),
                 customText(
                   customTextValue: name != null ? name! : 'User',
                   customTextStyle: heading3,
                 ),
                 customSpaceVertical(20),
-                // Lottie.asset(
-                //   'lib/asset/lottie/lottieLogo.json',
-                //   width: MediaQuery.of(context).size.width * .5,
-                //   fit: BoxFit.cover,
-                // ),
-                // customSpaceVertical(20),
+                Lottie.asset(
+                  'lib/asset/lottie/lottieLogo.json',
+                  width: MediaQuery.of(context).size.width * .5,
+                  fit: BoxFit.cover,
+                ),
+                customSpaceVertical(20),
                 ListView.separated(
                   separatorBuilder: (context, index) => customSpaceVertical(8),
                   shrinkWrap: true,
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            customSpaceHorizontal(24),
+                            customSpaceHorizontal(16),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 customText(
                                   customTextValue: homeMenuLists[contentIndex]
                                       ['title'],
-                                  customTextStyle: heading3,
+                                  customTextStyle: heading4,
                                 ),
                                 customText(
                                   customTextValue: homeMenuLists[contentIndex]
@@ -155,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String getGreeting() {
     final hour = DateTime.now().hour;
 
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return 'Selamat Pagi';
+    if (hour < 17) return 'Selamat Sore';
+    return 'Selamat Malam';
   }
 }

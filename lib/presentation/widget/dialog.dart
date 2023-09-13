@@ -32,6 +32,7 @@ Future<dynamic> customBasicDialog(
             customText(
               customTextValue: customDialogText,
               customTextStyle: heading4,
+              customTextAlign: TextAlign.center,
             ),
           ],
         ),

@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:tigasendok/common/constant.dart';
 import 'package:tigasendok/common/pallets.dart';
 import 'package:tigasendok/common/typography.dart';
 import 'package:tigasendok/data/repository/repository.dart';
+import 'package:tigasendok/data/utils/formatter.dart';
 import 'package:tigasendok/presentation/screen/manage/manage_order_screen.dart';
 import 'package:tigasendok/presentation/widget/component.dart';
+import 'package:tigasendok/presentation/widget/dialog.dart';
 
 class ManageAddOrderScreen extends StatefulWidget {
   const ManageAddOrderScreen({super.key, required this.accessToken});
@@ -25,6 +29,8 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
   String? selectedProductValue;
   String? selectedCustomerValue;
   String? quantityErrorText;
+  String? tempPrice;
+  String? tempTotal;
 
   @override
   void initState() {
@@ -88,23 +94,28 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
                           padding: const EdgeInsets.only(left: 8),
                           child: DropdownButton(
                             underline: const SizedBox.shrink(),
-                            value: contentIndex == 0
+                            hint: customText(
+                              customTextValue: contentIndex == 1
+                                  ? 'Pilih produk'
+                                  : 'Pilih pelanggan',
+                              customTextStyle: subHeading3,
+                            ),
+                            value: contentIndex == 1
                                 ? selectedProductValue
                                 : selectedCustomerValue,
                             onChanged: (value) {
                               setState(() {
-                                if (contentIndex == 0) {
+                                if (contentIndex == 1) {
                                   setState(() {
-                                    selectedProductValue = value.toString();
-                                    priceController.text = tempProduct
-                                        .firstWhere((product) =>
-                                            product['id'] == value)['price']
+                                    selectedProductValue = value;
+                                    tempPrice = tempProduct
+                                        .firstWhere((element) =>
+                                            element['id'].toString() ==
+                                            selectedProductValue)['price']
                                         .toString();
                                   });
                                 } else {
-                                  setState(() {
-                                    selectedCustomerValue = value.toString();
-                                  });
+                                  setState(() => selectedCustomerValue = value);
                                 }
                               });
                             },
@@ -135,7 +146,9 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
                             customTextFieldEnabled:
                                 contentIndex == 2 || contentIndex == 4
                                     ? false
-                                    : true,
+                                    : tempPrice == null
+                                        ? false
+                                        : true,
                             customTextFieldController: contentIndex == 2
                                 ? priceController
                                 : contentIndex == 3
@@ -144,10 +157,31 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
                             customTextFieldErrorText:
                                 contentIndex == 3 ? quantityErrorText : null,
                             customTextFieldHintText: contentIndex == 2
-                                ? priceController.text
+                                ? tempPrice == null
+                                    ? 'Masukkan harga'
+                                    : formattedCurency(tempPrice!)
                                 : contentIndex == 3
                                     ? 'Masukkan jumlah'
-                                    : 'Total Harga',
+                                    : tempTotal == null
+                                        ? 'Masukkan total'
+                                        : formattedCurency(tempTotal!),
+                            customTextFildOnChanged: (value) {
+                              if (contentIndex == 3) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    setState(() => quantityErrorText =
+                                        'Jumlah tidak boleh kosong');
+                                  } else {
+                                    setState(() {
+                                      quantityErrorText = null;
+                                      tempTotal = (int.parse(tempPrice!) *
+                                              int.parse(value))
+                                          .toString();
+                                    });
+                                  }
+                                });
+                              }
+                            },
                           ),
                         ),
                 ],
@@ -155,7 +189,41 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
             ),
             customButton(
               context,
-              customButtonTap: () {},
+              customButtonTap: () {
+                if (quantityController.text.isEmpty) {}
+
+                if (selectedCustomerValue == null ||
+                    selectedProductValue == null ||
+                    quantityController.text.isEmpty) {
+                  Future.delayed(
+                    const Duration(seconds: 3),
+                    () => Navigator.pop(context),
+                  );
+                  setState(
+                      () => quantityErrorText = 'Jumlah tidak boleh kosong');
+                  customBasicDialog(
+                    context,
+                    customDialogIcon: 'lib/asset/lottie/lottieFailed.json',
+                    customDialogText: 'Data tidak boleh kosong',
+                  );
+                } else {
+                  setState(() {
+                    quantityErrorText = null;
+                    customDialogWithButton(
+                      context,
+                      customDialogIcon: 'lib/asset/lottie/lottieAsk.json',
+                      customDialogText: 'Apakah kamu yakin ingin mengubah?',
+                      customDialogLeftButtonTap: () => createNewOrder(
+                        productId: int.parse(selectedProductValue!),
+                        customerId: int.parse(selectedCustomerValue!),
+                        customerQuantity: quantityController.text,
+                        price: tempPrice,
+                      ),
+                      customDialogRightButtonTap: () => Navigator.pop(context),
+                    );
+                  });
+                }
+              },
               customButtonValue: 'Tambah',
             ),
           ],
@@ -190,5 +258,41 @@ class _ManageAddOrderScreenState extends State<ManageAddOrderScreen> {
         tempProduct.add(productObject);
       }
     });
+  }
+
+  createNewOrder({
+    required customerId,
+    required productId,
+    required customerQuantity,
+    required price,
+  }) async {
+    final response = await Repository().createOrder(
+      accessToken: widget.accessToken,
+      customerId: customerId,
+      productId: productId,
+      quantity: customerQuantity,
+      price: price,
+    );
+
+    if (response.id == null) {
+      Future.delayed(const Duration(seconds: 3), () => Navigator.pop(context));
+      customBasicDialog(
+        context,
+        customDialogIcon: 'lib/asset/lottie/lottieFailed.json',
+        customDialogText: 'Data gagal ditambah',
+      );
+      return;
+    }
+
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacementNamed(context, ManageOrderScreen.routeName,
+          arguments: {'accessToken': widget.accessToken}),
+    );
+    customBasicDialog(
+      context,
+      customDialogIcon: 'lib/asset/lottie/lottieSuccess.json',
+      customDialogText: 'Data berhasil ditambah',
+    );
   }
 }
