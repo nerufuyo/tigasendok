@@ -1,16 +1,20 @@
-# tigasendok
-
-A new Flutter project.
+# TigaSendok 
+Sebuah aplikasi management restoran yang dibuat dengan menggunakan Flutter. Aplikasi ini berguna untuk mengatur pesanan dan pelanggan yang masuk.
 
 ## Getting Started
+1. Clone this repository
+2. Open the project with your IDE/Text Editor
+3. Run `flutter pub get` to get all dependencies
+4. Run `flutter run` to run the app
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
+- [x] Login
+- [x] Register
+- [x] Home
+- [x] Order CRUD
+- [x] Customer CRUD
+- [x] Logout
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<img src='screenshot/Screenshot.jpg'>
