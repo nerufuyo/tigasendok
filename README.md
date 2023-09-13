@@ -1,5 +1,8 @@
 # TigaSendok 
 Sebuah aplikasi management restoran yang dibuat dengan menggunakan Flutter. Aplikasi ini berguna untuk mengatur pesanan dan pelanggan yang masuk.
+Nama: Listyo Adi Pamungkas
+Kandidat: Mobile App Developer
+
 
 ## Getting Started
 1. Clone this repository
