@@ -104,3 +104,111 @@ class Order {
         "product": product.toJson(),
       };
 }
+
+class CreateOrder {
+  final String qty;
+  final String price;
+  final int total;
+  final bool isPaid;
+  final DateTime createdAt;
+  final int id;
+
+  CreateOrder({
+    required this.qty,
+    required this.price,
+    required this.total,
+    required this.isPaid,
+    required this.createdAt,
+    required this.id,
+  });
+
+  factory CreateOrder.fromJson(Map<String, dynamic> json) => CreateOrder(
+        qty: json["qty"],
+        price: json["price"],
+        total: json["total"],
+        isPaid: json["is_paid"],
+        createdAt: DateTime.parse(json["created_at"]),
+        id: json["id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "qty": qty,
+        "price": price,
+        "total": total,
+        "is_paid": isPaid,
+        "created_at": createdAt.toIso8601String(),
+        "id": id,
+      };
+}
+
+class UpdateOrder {
+  final int id;
+  final String qty;
+  final String price;
+  final int total;
+  final int isPaid;
+  final DateTime createdAt;
+
+  UpdateOrder({
+    required this.id,
+    required this.qty,
+    required this.price,
+    required this.total,
+    required this.isPaid,
+    required this.createdAt,
+  });
+
+  factory UpdateOrder.fromJson(Map<String, dynamic> json) => UpdateOrder(
+        id: json["id"],
+        qty: json["qty"],
+        price: json["price"],
+        total: json["total"],
+        isPaid: json["is_paid"],
+        createdAt: DateTime.parse(json["created_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "qty": qty,
+        "price": price,
+        "total": total,
+        "is_paid": isPaid,
+        "created_at": createdAt.toIso8601String(),
+      };
+}
+
+class PayOrder {
+  final int id;
+  final int qty;
+  final int price;
+  final int total;
+  final bool isPaid;
+  final DateTime createdAt;
+
+  PayOrder({
+    required this.id,
+    required this.qty,
+    required this.price,
+    required this.total,
+    required this.isPaid,
+    required this.createdAt,
+  });
+
+  factory PayOrder.fromJson(Map<String, dynamic> json) => PayOrder(
+        id: json["id"],
+        qty: json["qty"],
+        price: json["price"],
+        total: json["total"],
+        isPaid: json["is_paid"],
+        createdAt: DateTime.parse(json["created_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "qty": qty,
+        "price": price,
+        "total": total,
+        "is_paid": isPaid,
+        "created_at": createdAt.toIso8601String(),
+      };
+}

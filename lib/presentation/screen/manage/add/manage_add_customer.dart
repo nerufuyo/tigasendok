@@ -178,9 +178,7 @@ class _ManageAddCustomerState extends State<ManageAddCustomer> {
           const Duration(seconds: 3),
           () => Navigator.pushReplacementNamed(
               context, ManageCustomerScreen.routeName,
-              arguments: {
-                'accessToken': widget.accessToken,
-              }),
+              arguments: {'accessToken': widget.accessToken}),
         );
         customBasicDialog(
           context,

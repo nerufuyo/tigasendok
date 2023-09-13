@@ -42,7 +42,7 @@ TextField customTextField({
         color: Colors.red,
       ),
       hintText: customTextFieldHintText ?? 'Please input text',
-      hintStyle: bodyText2.copyWith(color: Colors.black.withOpacity(.5)),
+      hintStyle: bodyText2.copyWith(color: Colors.black.withOpacity(.75)),
       suffixIcon: customTextFieldSuffix,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
